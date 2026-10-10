@@ -2,10 +2,12 @@ import uuid
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+from starlette.concurrency import run_in_threadpool
 
 from app.api.deps import get_current_user, require_roles
 from app.db.session import get_db
 from app.models.user import User
+from app.realtime.manager import manager
 from app.schemas.ticket import TicketCreate, TicketOut, TicketStatus, TicketUpdate
 from app.services import ticket_service
 
@@ -40,10 +42,17 @@ def get_ticket(
 
 
 @router.patch("/{ticket_id}", response_model=TicketOut)
-def update_ticket(
+async def update_ticket(
     ticket_id: uuid.UUID,
     data: TicketUpdate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    return ticket_service.update_ticket(db, current_user, ticket_id, data)
+    ticket = await run_in_threadpool(
+        ticket_service.update_ticket, db, current_user, ticket_id, data
+    )
+    result = TicketOut.model_validate(ticket)
+    await manager.broadcast(
+        ticket.id, {"type": "ticket_updated", "data": result.model_dump(mode="json")}
+    )
+    return result
