@@ -2,9 +2,10 @@ import uuid
 from datetime import datetime
 
 from sqlalchemy import CheckConstraint, DateTime, ForeignKey, Index, String, func
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
+from app.models.user import User
 
 
 class Ticket(Base):
@@ -35,4 +36,9 @@ class Ticket(Base):
     )
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+    customer: Mapped[User] = relationship(foreign_keys="Ticket.customer_id")
+    assigned_agent: Mapped[User | None] = relationship(
+        foreign_keys="Ticket.assigned_agent_id"
     )

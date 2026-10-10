@@ -22,3 +22,10 @@ class UserCreate(BaseModel):
     password: str = Field(min_length=8, max_length=128)
     # role selain yang ada disini berarti default admin
     role: Literal["agent", "customer"]
+
+class UserBrief(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    name: str
+    role: str
