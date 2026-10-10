@@ -1,12 +1,21 @@
 from fastapi import Depends, FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from app.api.routers import auth, messages, tickets, users, ws
+from app.core.config import settings
 from app.core.exceptions import register_exception_handlers
 from app.db.session import get_db
 
 app = FastAPI(title="Ticketing Multi Bisnis", version="0.1.0")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origins_list,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 register_exception_handlers(app)
 app.include_router(auth.router)
