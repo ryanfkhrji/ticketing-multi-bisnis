@@ -4,7 +4,7 @@ Aplikasi ticketing **multi-bisnis (multi-tenant)**. Pelanggan mengirim keluhan, 
 
 Proyek ini dibuat untuk Test Junior Developer @SVO Connect.
 
-- **Video demo:** [ISI: tempel link video demo 3–5 menit di sini]
+- **Video demo:** https://drive.google.com/file/d/1TY-b7J8hDo-1ZQvj2W3KYEcOyukHXqa0/view?usp=sharing
 - **Estimasi waktu menjalankan dari nol:** sekitar 10–15 menit
 
 ## Daftar isi
