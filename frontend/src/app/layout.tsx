@@ -22,6 +22,8 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Ticketing Multi Bisnis",
   description: "Application for Ticketing Multi Bisnis",
+  authors: [{ name: "Ryan" }],
+  creator: "Ryan",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
