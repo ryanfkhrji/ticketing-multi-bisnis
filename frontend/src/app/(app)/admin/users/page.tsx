@@ -15,6 +15,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { createUser, errorMessage, listUsers } from "@/lib/api";
 import { CREATABLE_ROLES, ROLE_LABEL, formatDateTime, isCreatableRole } from "@/lib/ticket-ui";
 import type { CreatableRole } from "@/types/api";
+import { useState } from "react";
 
 interface UserForm {
   name: string;
@@ -25,6 +26,7 @@ interface UserForm {
 
 function CreateUserCard() {
   const queryClient = useQueryClient();
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -86,10 +88,10 @@ function CreateUserCard() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password awal</Label>
+              <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 autoComplete="new-password"
                 {...register("password", {
                   required: "Password wajib diisi",
@@ -98,6 +100,11 @@ function CreateUserCard() {
                 })}
               />
               {errors.password && <p className="text-sm text-destructive">{errors.password.message}</p>}
+
+              <div className="flex items-center">
+                <input id="show-password" type="checkbox" className="mr-2" checked={showPassword} onChange={(e) => setShowPassword(e.target.checked)} />
+                <label htmlFor="show-password">Tampilkan password</label>
+              </div>
             </div>
 
             <div className="space-y-2">
