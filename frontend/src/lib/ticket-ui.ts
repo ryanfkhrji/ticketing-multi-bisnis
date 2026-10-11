@@ -24,7 +24,7 @@ export const ROLE_LABEL: Record<Role, string> = {
 };
 
 export function isTicketStatus(value: string): value is TicketStatus {
-  return TICKET_STATUSES.some((item) => item === value);
+  return (TICKET_STATUSES as readonly string[]).includes(value);
 }
 
 export function isTicketPriority(value: string): value is TicketPriority {

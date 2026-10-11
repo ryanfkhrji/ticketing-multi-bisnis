@@ -7,29 +7,11 @@ import { useState } from "react";
 import { PriorityBadge, StatusBadge } from "@/components/TicketBadges";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { errorMessage, listTickets } from "@/lib/api";
-import {
-  STATUS_LABEL,
-  TICKET_STATUSES,
-  formatDateTime,
-  isTicketStatus,
-} from "@/lib/ticket-ui";
+import { STATUS_LABEL, TICKET_STATUSES, formatDateTime, isTicketStatus } from "@/lib/ticket-ui";
 import { useAuthStore } from "@/store/authStore";
 import type { Ticket, TicketStatus } from "@/types/api";
 
@@ -53,8 +35,11 @@ export default function TicketsPage() {
   });
 
   function handleFilterChange(value: string | null) {
-    // Tanda ! memberi tahu TypeScript: "Tenang, ini tidak akan null"
-    setFilter(isTicketStatus(value!) ? value! : ALL);
+    if (value && isTicketStatus(value)) {
+      setFilter(value);
+    } else {
+      setFilter(ALL);
+    }
   }
 
   return (
@@ -107,11 +92,7 @@ export default function TicketsPage() {
       {data && data.length === 0 && (
         <Card>
           <CardContent>
-            <p className="text-sm text-muted-foreground">
-              {filter === ALL
-                ? "Belum ada tiket."
-                : `Tidak ada tiket dengan status ${STATUS_LABEL[filter]}.`}
-            </p>
+            <p className="text-sm text-muted-foreground">{filter === ALL ? "Belum ada tiket." : `Tidak ada tiket dengan status ${STATUS_LABEL[filter]}.`}</p>
           </CardContent>
         </Card>
       )}
@@ -148,9 +129,7 @@ export default function TicketsPage() {
                     </TableCell>
                     {!isCustomer && <TableCell>{ticket.customer.name}</TableCell>}
                     <TableCell>{assigneeLabel(ticket)}</TableCell>
-                    <TableCell className="whitespace-nowrap text-sm text-muted-foreground">
-                      {formatDateTime(ticket.updated_at)}
-                    </TableCell>
+                    <TableCell className="whitespace-nowrap text-sm text-muted-foreground">{formatDateTime(ticket.updated_at)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -175,9 +154,7 @@ export default function TicketsPage() {
                       {!isCustomer && `${ticket.customer.name} • `}
                       {assigneeLabel(ticket)}
                     </p>
-                    <p className="text-xs text-muted-foreground">
-                      {formatDateTime(ticket.updated_at)}
-                    </p>
+                    <p className="text-xs text-muted-foreground">{formatDateTime(ticket.updated_at)}</p>
                   </CardContent>
                 </Card>
               </Link>
