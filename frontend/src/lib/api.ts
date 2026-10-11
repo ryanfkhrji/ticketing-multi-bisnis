@@ -1,5 +1,5 @@
 import { useAuthStore } from "@/store/authStore";
-import type { AccessTokenResponse, ApiErrorBody, FieldError, MeResponse, RegisterBusinessInput, TokenResponse } from "@/types/api";
+import type { AccessTokenResponse, ApiErrorBody, FieldError, MeResponse, Message, RegisterBusinessInput, Ticket, TicketCreateInput, TicketStatus, TicketUpdateInput, TokenResponse, User, UserCreateInput } from "@/types/api";
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000";
 export const WS_URL = API_URL.replace(/^http/, "ws");
@@ -13,6 +13,15 @@ export class ApiError extends Error {
     this.status = status;
     this.details = details;
   }
+}
+
+/** Pesan yang aman ditampilkan ke user, termasuk detail validasi 422 kalau ada. */
+export function errorMessage(err: unknown, fallback: string): string {
+  if (err instanceof ApiError) {
+    const detail = err.details?.[0]?.message;
+    return detail ? `${err.message}: ${detail}` : err.message;
+  }
+  return fallback;
 }
 
 interface RequestOptions {
@@ -101,6 +110,8 @@ export async function apiFetch<T>(path: string, options: RequestOptions = {}): P
   return (await res.json()) as T;
 }
 
+// ---------- Auth ----------
+
 export function login(email: string, password: string): Promise<TokenResponse> {
   return apiFetch<TokenResponse>("/auth/login", {
     method: "POST",
@@ -119,4 +130,37 @@ export function registerBusiness(input: RegisterBusinessInput): Promise<MeRespon
 
 export function getMe(): Promise<MeResponse> {
   return apiFetch<MeResponse>("/auth/me");
+}
+
+// ---------- Users (Admin) ----------
+
+export function listUsers(): Promise<User[]> {
+  return apiFetch<User[]>("/users");
+}
+
+export function createUser(input: UserCreateInput): Promise<User> {
+  return apiFetch<User>("/users", { method: "POST", body: input });
+}
+
+// ---------- Tickets ----------
+
+export function listTickets(status?: TicketStatus): Promise<Ticket[]> {
+  const query = status ? `?status=${status}` : "";
+  return apiFetch<Ticket[]>(`/tickets${query}`);
+}
+
+export function getTicket(id: string): Promise<Ticket> {
+  return apiFetch<Ticket>(`/tickets/${id}`);
+}
+
+export function createTicket(input: TicketCreateInput): Promise<Ticket> {
+  return apiFetch<Ticket>("/tickets", { method: "POST", body: input });
+}
+
+export function updateTicket(id: string, input: TicketUpdateInput): Promise<Ticket> {
+  return apiFetch<Ticket>(`/tickets/${id}`, { method: "PATCH", body: input });
+}
+
+export function listMessages(ticketId: string): Promise<Message[]> {
+  return apiFetch<Message[]>(`/tickets/${ticketId}/messages`);
 }

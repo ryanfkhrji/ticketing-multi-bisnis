@@ -66,6 +66,24 @@ export interface RegisterBusinessInput {
   password: string;
 }
 
+export interface TicketCreateInput {
+  subject: string;
+  category: string;
+  priority: TicketPriority;
+  message: string;
+}
+
+export type TicketUpdateInput = { status: TicketStatus } | { assigned_agent_id: string };
+
+export type CreatableRole = "agent" | "customer";
+
+export interface UserCreateInput {
+  name: string;
+  email: string;
+  password: string;
+  role: CreatableRole;
+}
+
 export interface FieldError {
   field: string;
   message: string;
@@ -80,7 +98,4 @@ export interface ApiErrorBody {
 }
 
 // Event yang dikirim server lewat WebSocket
-export type WsEvent =
-  | { type: "message"; data: Message }
-  | { type: "ticket_updated"; data: Ticket }
-  | { type: "error"; detail: string };
+export type WsEvent = { type: "message"; data: Message } | { type: "ticket_updated"; data: Ticket } | { type: "error"; detail: string };
