@@ -45,7 +45,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>Masuk</CardTitle>
-          <CardDescription>Masuk ke akun HelpDesk Mini Anda.</CardDescription>
+          <CardDescription>Masuk ke akun Ticketing Anda.</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
