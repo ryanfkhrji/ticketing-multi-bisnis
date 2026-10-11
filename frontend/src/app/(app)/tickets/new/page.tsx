@@ -58,7 +58,7 @@ function NewTicketFormCard() {
   }
 
   return (
-    <Card className="mx-auto w-full max-w-2xl">
+    <Card className="mx-auto w-full">
       <CardHeader>
         <CardTitle>Buat tiket</CardTitle>
         <CardDescription>Jelaskan keluhan Anda. Pesan ini menjadi pesan pertama di ruang chat tiket.</CardDescription>
