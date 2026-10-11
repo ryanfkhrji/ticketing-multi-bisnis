@@ -29,7 +29,7 @@ export const useAuthStore = create<AuthState>()(
       logout: () => set({ accessToken: null, refreshToken: null, user: null, business: null }),
     }),
     {
-      name: "helpdesk-auth",
+      name: "ticketing-auth",
       // Hanya token yang disimpan di localStorage; profil selalu diambil dari /auth/me.
       partialize: (state) => ({
         accessToken: state.accessToken,

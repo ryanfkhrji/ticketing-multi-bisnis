@@ -45,19 +45,22 @@ let refreshPromise: Promise<boolean> | null = null;
 async function refreshAccessToken(): Promise<boolean> {
   const { refreshToken, setTokens } = useAuthStore.getState();
   if (!refreshToken) return false;
+
+  let res: Response;
   try {
-    const res = await fetch(`${API_URL}/auth/refresh`, {
+    res = await fetch(`${API_URL}/auth/refresh`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ refresh_token: refreshToken }),
     });
-    if (!res.ok) return false;
-    const data = (await res.json()) as AccessTokenResponse;
-    setTokens(data.access_token);
-    return true;
   } catch {
-    return false;
+    throw new ApiError(0, "Tidak dapat terhubung ke server");
   }
+
+  if (!res.ok) return false;
+  const data = (await res.json()) as AccessTokenResponse;
+  setTokens(data.access_token);
+  return true;
 }
 
 function refreshOnce(): Promise<boolean> {
