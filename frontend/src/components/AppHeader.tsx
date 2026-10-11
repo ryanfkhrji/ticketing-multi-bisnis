@@ -31,6 +31,7 @@ export function AppHeader() {
   const initial = user?.name?.trim().charAt(0).toUpperCase() ?? "?";
 
   function handleLogout() {
+    setLogoutOpen(false);
     logout();
     router.replace("/login");
   }
