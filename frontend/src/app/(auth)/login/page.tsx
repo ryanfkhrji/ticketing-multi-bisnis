@@ -21,6 +21,7 @@ export default function LoginPage() {
   const router = useRouter();
   const setTokens = useAuthStore((state) => state.setTokens);
   const [serverError, setServerError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -56,8 +57,13 @@ export default function LoginPage() {
 
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" autoComplete="current-password" {...register("password", { required: "Password wajib diisi" })} />
+              <Input id="password" type={showPassword ? "text" : "password"} autoComplete="current-password" {...register("password", { required: "Password wajib diisi" })} />
               {errors.password && <p className="text-sm text-destructive">{errors.password.message}</p>}
+
+              <div className="flex items-center">
+                <input id="show-password" type="checkbox" className="mr-2" checked={showPassword} onChange={(e) => setShowPassword(e.target.checked)} />
+                <label htmlFor="show-password">Tampilkan password</label>
+              </div>
             </div>
 
             {serverError && (
@@ -66,7 +72,7 @@ export default function LoginPage() {
               </p>
             )}
 
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
+            <Button type="submit" className="w-full mt-3" disabled={isSubmitting}>
               {isSubmitting ? "Memproses..." : "Masuk"}
             </Button>
 

@@ -49,7 +49,7 @@ export default function TicketsPage() {
         <div className="flex items-center gap-2">
           <Select value={filter} onValueChange={handleFilterChange}>
             <SelectTrigger className="w-40" aria-label="Filter status">
-              <SelectValue placeholder="Semua status" />
+              <SelectValue>{filter === ALL ? "Semua status" : STATUS_LABEL[filter]}</SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value={ALL}>Semua status</SelectItem>
@@ -100,7 +100,7 @@ export default function TicketsPage() {
       {data && data.length > 0 && (
         <>
           {/* Tampilan tabel untuk layar lebar */}
-          <div className="hidden rounded-md border md:block">
+          <div className="hidden border md:block">
             <Table>
               <TableHeader>
                 <TableRow>
